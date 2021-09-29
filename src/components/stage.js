@@ -63,7 +63,8 @@ class Stage {
     // this.scene.add(axesHelper);
 
     this.camera = new THREE.PerspectiveCamera(30, this.container.offsetWidth / this.container.offsetWidth, 0.1, 1000);
-    this.camera.position.set(0, -14, 10);
+    this.camera.position.set(0, -13, 10);
+    // this.camera.position.set(9.6, -1, 9.3);
 
     this.controls = new OrbitControls(this.camera, this.container.parentNode);
     this.controls.target.set(0, 0, 0);
@@ -97,10 +98,12 @@ class Stage {
     ctx.textAlign = 'center';
     ctx.textBaseline="middle";
     ctx.fillText('sinx+cosy', 0, 0);
+    ctx.font = "bold 40px sans-serif";
+    ctx.fillText('www.sinxcosy.com', 0, cvs.height / 2 - 25);
     // document.body.appendChild(cvs);
 
     const pointCount = 2 || Math.min(window.innerWidth / 1440, 1);
-    const geom = new THREE.PlaneBufferGeometry(8, 2, Math.abs(100 * pointCount), Math.abs(20 * pointCount));
+    const geom = new THREE.PlaneBufferGeometry(8, 3, Math.abs(100 * pointCount), Math.abs(20 * pointCount));
     let material = new THREE.ShaderMaterial({
       vertexShader: VERTEX_SHADER,
       fragmentShader: FRAGMENT_SHADER,

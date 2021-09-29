@@ -3,6 +3,7 @@ uniform float time;
 varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vPosition;
+varying vec3 vNewPosition;
 
 void main() {
   vUv = uv;
@@ -27,6 +28,9 @@ void main() {
   newPosition.z = newPosition.z * 0.25;
   newPosition.z *= newPosition.z;
   // newPosition.z *= newPosition.z;
+
+  vNewPosition = newPosition;
+
   vNormal = vec3(newPosition);
   vNormal.z += 0.9;
   vNormal = normalize(vNormal);
@@ -40,6 +44,7 @@ uniform float time;
 varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vPosition;
+varying vec3 vNewPosition;
 
 vec3 hsv2rgb(vec3 c)
 {
@@ -52,11 +57,14 @@ void main() {
   vec4 color = texture2D(texture1, vUv);
 
   if (color.x > 0.0) {
-    vec3 hsv = vec3(fract((vPosition.x + time + 4.0) / 8.0), 0.5 * color.x, 1.);
+    vec3 hsv = vec3(fract((vPosition.x + vNewPosition.z + time + 4.0) / 8.0), 0.5 * color.x, 1.);
+    if (vPosition.y < -0.9 && vPosition.x < 2.) {
+      hsv.x = 1. - hsv.x;
+    }
     color = vec4(hsv2rgb(hsv), 1.);
   } else {
-    vec3 hsv = vec3(1. - fract((vPosition.x + time + 4.0) / 8.0), 0.04, 1.);
-    color = vec4(hsv2rgb(hsv), 1);
+    vec3 hsv = vec3(1. - fract((vPosition.x + time + 4.0) / 8.0), 0.0, 1.);
+    color = vec4(hsv2rgb(hsv), 0.);
   }
 
   gl_FragColor = color;
