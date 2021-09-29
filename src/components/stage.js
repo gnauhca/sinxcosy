@@ -36,7 +36,7 @@ class Stage {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setPixelRatio(2);
     this.renderer.setClearColor(0xffffff);
-    this.renderer.setSize(2000, 2000);
+    this.renderer.setSize(1000, 1000);
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.renderer.physicallyCorrectLights = true;
     this.container.appendChild(this.renderer.domElement);
@@ -62,8 +62,8 @@ class Stage {
     // const axesHelper = new THREE.AxesHelper(10);
     // this.scene.add(axesHelper);
 
-    this.camera = new THREE.PerspectiveCamera(40, this.container.offsetWidth / this.container.offsetWidth, 0.1, 1000);
-    this.camera.position.set(0, -8, 12);
+    this.camera = new THREE.PerspectiveCamera(30, this.container.offsetWidth / this.container.offsetWidth, 0.1, 1000);
+    this.camera.position.set(0, -14, 10);
 
     this.controls = new OrbitControls(this.camera, this.container.parentNode);
     this.controls.target.set(0, 0, 0);
@@ -72,10 +72,10 @@ class Stage {
     this.controls.enableDamping = true;
     // this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 1;
-    this.controls.minDistance = 3;
-    this.controls.maxDistance = 20;
-    this.controls.minPolarAngle = 0 + 1; // radians
-    this.controls.maxPolarAngle = Math.PI - 1; // radians
+    this.controls.minDistance = 10;
+    this.controls.maxDistance = 30;
+    this.controls.minPolarAngle = 0 + 0.5; // radians
+    this.controls.maxPolarAngle = Math.PI - 0.5; // radians
     // this.minZoom = 0;
     // this.maxZoom = 18;
     this.controls.addEventListener('change', () => this.onControlChange);
@@ -88,32 +88,34 @@ class Stage {
   setupParticle() {
     const cvs = document.createElement('canvas');
     cvs.style = 'position: absolute; left: 0; top: 0;';
-    cvs.width = 800;
-    cvs.height = 800;
+    cvs.width = 1600;
+    cvs.height = 400;
     const ctx = cvs.getContext('2d');
-    ctx.translate(cvs.width / 2, cvs.height / 2 + 4);
-    ctx.font = "bold 120px Arial";
+    ctx.translate(cvs.width / 2, cvs.height / 2);
+    ctx.font = "bold 320px sans-serif";
     ctx.fillStyle = 'red';
     ctx.textAlign = 'center';
     ctx.textBaseline="middle";
-    ctx.fillText('z = sinx+cosy', 0, 0);
+    ctx.fillText('sinx+cosy', 0, 0);
     // document.body.appendChild(cvs);
 
-    const pointCount = 1 || Math.min(window.innerWidth / 1440, 1);
-    const geom = new THREE.PlaneBufferGeometry(8, 8, Math.abs(100 * pointCount), Math.abs(100 * pointCount));
+    const pointCount = 2 || Math.min(window.innerWidth / 1440, 1);
+    const geom = new THREE.PlaneBufferGeometry(8, 2, Math.abs(100 * pointCount), Math.abs(20 * pointCount));
     let material = new THREE.ShaderMaterial({
       vertexShader: VERTEX_SHADER,
       fragmentShader: FRAGMENT_SHADER,
       uniforms: {
-        time: { type: '1f', value: 0 },
+        time: { type: '1f', value: 200 },
         texture1: { type: "t", value: new THREE.CanvasTexture(cvs) },
         // pointSize: { type: '1f', value: window.innerWidth / 1920 }
       },
       transparent: true,
+      side: THREE.DoubleSide,
       // blending: THREE.AdditiveBlending
     });
 
-    const points = new THREE.Points(geom, material);
+    // const points = new THREE.Points(geom, material);
+    const points = new THREE.Mesh(geom, material);
     // points.rotation.z = Math.PI / 4;
     // points.rotation.x = -Math.PI / 2;
     this.scene.add(points);
@@ -191,6 +193,7 @@ class Stage {
   }
 
   onResize() {
+    return;
     this.camera.aspect = window.innerWidth / window.innerWidth;
     this.camera.updateProjectionMatrix();
 

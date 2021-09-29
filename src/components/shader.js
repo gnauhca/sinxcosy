@@ -10,10 +10,23 @@ void main() {
   vec4 modelPos = modelViewMatrix * vec4(position, 1.0);
   float cameraLength = length(vec3(modelPos));
 
-  gl_PointSize = min(12.0 / cameraLength, 4.0) * 15.0;
+  gl_PointSize = min(12.0 / cameraLength, 4.0) * 2.5;
   vec3 newPosition = vec3(position);
-  newPosition.z = sin(newPosition.x * 2.0 + time) + cos(newPosition.y * 2.0 + time);
-  newPosition.z = newPosition.z * 0.3;
+  // newPosition.x += time / 10.;
+  // newPosition.x = mod(newPosition.x, 8.) - 4.;
+  // newPosition.y += time / 10.;
+  // newPosition.y = mod(newPosition.y, 8.) - 4.;
+
+
+  // vUv.x += time / 10. / 8.  - 0.5;
+  // vUv.x = fract(vUv.x);
+  // vUv.y += time / 10. / 8.  - 0.5;
+  // vUv.y = fract(vUv.y);
+
+  newPosition.z = sin(newPosition.x * 5. + time) + cos(newPosition.y * 5. + time / 1.2);
+  newPosition.z = newPosition.z * 0.25;
+  newPosition.z *= newPosition.z;
+  // newPosition.z *= newPosition.z;
   vNormal = vec3(newPosition);
   vNormal.z += 0.9;
   vNormal = normalize(vNormal);
@@ -39,11 +52,11 @@ void main() {
   vec4 color = texture2D(texture1, vUv);
 
   if (color.x > 0.0) {
-    vec3 hsv = vec3(fract((vPosition.x + time + 4.0) / 8.0), 1.0, 0.8);
-    color = vec4(hsv2rgb(hsv), 1.0);
+    vec3 hsv = vec3(fract((vPosition.x + time + 4.0) / 8.0), 0.5 * color.x, 1.);
+    color = vec4(hsv2rgb(hsv), 1.);
   } else {
-    vec3 hsv = vec3(1. - fract((vPosition.x + time + 4.0) / 8.0), 1.0, 1.);
-    color = vec4(hsv2rgb(hsv), 0.02);
+    vec3 hsv = vec3(1. - fract((vPosition.x + time + 4.0) / 8.0), 0.04, 1.);
+    color = vec4(hsv2rgb(hsv), 1);
   }
 
   gl_FragColor = color;

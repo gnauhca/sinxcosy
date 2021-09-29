@@ -36,8 +36,8 @@ export default {
   width: 100vw;
   height: 100vw;
   canvas {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%!important;
+    height: 100%!important;
   }
 }
 
