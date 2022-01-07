@@ -61,10 +61,12 @@ void main() {
     if (vPosition.y < -0.9 && vPosition.x < 2.) {
       hsv.x = 1. - hsv.x;
     }
-    color = vec4(hsv2rgb(hsv), 1.);
+    // color = vec4(hsv2rgb(hsv), 1.);
+    color = vec4(0., 0., 0., 1.);
   } else {
-    vec3 hsv = vec3(1. - fract((vPosition.x + time + 4.0) / 8.0), 0.0, 1.);
-    color = vec4(hsv2rgb(hsv), 0.);
+    color = vec4(1., 1., 1., 0.);
+    // vec3 hsv = vec3(1. - fract((vPosition.x + time + 4.0) / 8.0), 0.0, 1.);
+    // color = vec4(hsv2rgb(hsv), 0.);
   }
 
   gl_FragColor = color;

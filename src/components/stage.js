@@ -36,7 +36,7 @@ class Stage {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setPixelRatio(2);
     this.renderer.setClearColor(0xffffff);
-    this.renderer.setSize(1000, 1000);
+    this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.renderer.physicallyCorrectLights = true;
     this.container.appendChild(this.renderer.domElement);
@@ -48,7 +48,7 @@ class Stage {
     this.scene.add(ambientLight);
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(3, -2, 1);
+    dirLight.position.set(0, -2, 1);
     this.scene.add( dirLight );
 
     // const helper = new THREE.DirectionalLightHelper( dirLight, 2, 0xff0000 );
@@ -62,28 +62,26 @@ class Stage {
     // const axesHelper = new THREE.AxesHelper(10);
     // this.scene.add(axesHelper);
 
-    this.camera = new THREE.PerspectiveCamera(30, this.container.offsetWidth / this.container.offsetWidth, 0.1, 1000);
-    this.camera.position.set(0, -13, 10);
-    // this.camera.position.set(9.6, -1, 9.3);
+    this.camera = new THREE.PerspectiveCamera(40, this.container.offsetWidth / this.container.offsetHeight, 0.1, 1000);
+    this.camera.position.set(0, -10, 10).setLength(6);
 
     this.controls = new OrbitControls(this.camera, this.container.parentNode);
+    // this.controls.enabled = false;
     this.controls.target.set(0, 0, 0);
     this.controls.update();
     this.controls.enablePan = false;
     this.controls.enableDamping = true;
     // this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 1;
-    this.controls.minDistance = 10;
-    this.controls.maxDistance = 30;
-    this.controls.minPolarAngle = 0 + 0.5; // radians
-    this.controls.maxPolarAngle = Math.PI - 0.5; // radians
+    // this.controls.minPolarAngle = 0 + 0.5; // radians
+    // this.controls.maxPolarAngle = Math.PI - 0.5; // radians
     // this.minZoom = 0;
     // this.maxZoom = 18;
     this.controls.addEventListener('change', () => this.onControlChange);
     window.addEventListener('resize', this.onResize.bind(this));
 
-    this.setupParticle();
-    // this.setupCylinder();
+    // this.setupParticle();
+    this.setupCylinder();
   }
 
   setupParticle() {
@@ -97,10 +95,8 @@ class Stage {
     ctx.fillStyle = 'red';
     ctx.textAlign = 'center';
     ctx.textBaseline="middle";
-    ctx.fillText('sinx+cosy', 0, 0);
+    ctx.fillText('sinxcosy', 0, 0);
     ctx.font = "bold 40px sans-serif";
-    ctx.fillText('www.sinxcosy.com', 0, cvs.height / 2 - 25);
-    // document.body.appendChild(cvs);
 
     const pointCount = 2 || Math.min(window.innerWidth / 1440, 1);
     const geom = new THREE.PlaneBufferGeometry(8, 3, Math.abs(100 * pointCount), Math.abs(20 * pointCount));
@@ -121,6 +117,7 @@ class Stage {
     const points = new THREE.Mesh(geom, material);
     // points.rotation.z = Math.PI / 4;
     // points.rotation.x = -Math.PI / 2;
+    this.mesh = points;
     this.scene.add(points);
 
     this.addTick((delta) => {
@@ -140,20 +137,55 @@ class Stage {
     //     group.add(cylinder);
     //   }
     // }
+    this.camera.position.set(0, -1, 4).setLength(4);
 
-    const cylinderGeom = new THREE.BoxBufferGeometry(1, 1, 10, 1, 1, 1);
-    const material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
 
-    console.log(material);
+
+    const maxWidth = 6;
+    const xCount = 47;
+    const step = maxWidth / xCount;
+    const yCount = 7;
+    const cylinders = [];
+
+    const text = [
+      '.xxx...xxx..x...x.x...x..xxx...xxx...xxx..x...x',
+      'x...x...x...x...x.x...x.x...x.x...x.x...x.x...x',
+      'x.......x...xx..x..x.x..x.....x...x.x......x.x.',
+      '.xxx....x...x.x.x...x...x.....x...x..xxx....x..',
+      '....x...x...x..xx..x.x..x.....x...x.....x..x...',
+      'x...x...x...x...x.x...x.x...x.x...x.x...x.x....',
+      '.xxx...xxx..x...x.x...x..xxx...xxx...xxx..x....',
+    ]
+
+    const cylinderGeom = new THREE.BoxBufferGeometry(step * 0.8, step * 0.8, step * 15, 1, 1, 1);
+    const material = new THREE.MeshLambertMaterial({ color: 0x222222 });
+    this.addTick((delta) => {
+      if (material.userData.shader) {
+        material.userData.shader.uniforms.time.value += delta * 0.18;
+      }
+    });
     material.transparent = true;
     material.onBeforeCompile = ((shader) => {
       shader.fragmentShader = FRAGMENT_SHADER2;
       shader.vertexShader = VERTEX_SHADER2;
+      shader.uniforms.time = { type: '1f', value: 0 };
       console.log(shader.fragmentShader);
       console.log(shader.vertexShader);
+      material.userData.shader = shader;
     });
+
+    for(let y = 0; y < yCount; y++) {
+      for(let x = 0; x < xCount; x++) {
+        if (text[y][x] === '.') {
+          continue;
+        }
+        const mesh = new THREE.Mesh(cylinderGeom, material);
+        mesh.position.set((x - xCount / 2) * step, -(y - yCount / 2) * step, 0);
+        this.scene.add(mesh);
+        cylinders.push(mesh);
+      }
+    }
     const cylinder = new THREE.Mesh(cylinderGeom, material);
-    this.scene.add(cylinder);
   }
 
   entryCamera() {
@@ -196,11 +228,9 @@ class Stage {
   }
 
   onResize() {
-    return;
-    this.camera.aspect = window.innerWidth / window.innerWidth;
+    this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
     this.camera.updateProjectionMatrix();
-
-    this.renderer.setSize(window.innerWidth, window.innerWidth);
+    this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
   }
 
   onControlChange() {}
