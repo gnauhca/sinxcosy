@@ -135,10 +135,10 @@ void main() {
 	// float addLength = cn(normalize(vec3(worldPosition)) * 2.9 + time * 0.9);
 	vec4 worldPosition = modelMatrix * vec4(0., 0., 0., 1.0);
 
-	float addLength = cn(vec3(worldPosition) * 5. + time) * 0.2;
+	float addLength = cn(vec3(worldPosition) * .5 + time) * 0.2;
 	vec3 newPosition = position;
 	if (newPosition.z > 0.) {
-		// newPosition.z += addLength;
+		newPosition.z += addLength;
 	}
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);

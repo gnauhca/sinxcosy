@@ -43,19 +43,18 @@ class Stage {
 
     this.clock = new THREE.Clock();
     this.scene = new THREE.Scene();
-    const ambientLight = new THREE.AmbientLight(0x444444, 1);
+    const ambientLight = new THREE.AmbientLight(0x444444, 0.5);
     this.ambientLight = ambientLight;
     this.scene.add(ambientLight);
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(0, -2, 1);
+    dirLight.position.set(0, 1, 4);
     this.scene.add( dirLight );
 
     // const helper = new THREE.DirectionalLightHelper( dirLight, 2, 0xff0000 );
     // this.scene.add( helper );
 
     this.dirLight = dirLight;
-    this.scene.add(dirLight);
 
     // const gridHelper = new THREE.GridHelper(20, 20);
     // this.scene.add(gridHelper);
@@ -65,7 +64,7 @@ class Stage {
     this.camera = new THREE.PerspectiveCamera(40, this.container.offsetWidth / this.container.offsetHeight, 0.1, 1000);
     this.camera.position.set(0, -10, 10).setLength(6);
 
-    this.controls = new OrbitControls(this.camera, this.container.parentNode);
+    this.controls = new OrbitControls(this.camera, this.container);
     // this.controls.enabled = false;
     this.controls.target.set(0, 0, 0);
     this.controls.update();
@@ -141,21 +140,31 @@ class Stage {
 
 
 
-    const maxWidth = 6;
-    const xCount = 47;
+
+
+    // const text = [
+    //   '.xxx...xxx..x...x.x...x..xxx...xxx...xxx..x...x',
+    //   'x...x...x...x...x.x...x.x...x.x...x.x...x.x...x',
+    //   'x.......x...xx..x..x.x..x.....x...x.x......x.x.',
+    //   '.xxx....x...x.x.x...x...x.....x...x..xxx....x..',
+    //   '....x...x...x..xx..x.x..x.....x...x.....x..x...',
+    //   'x...x...x...x...x.x...x.x...x.x...x.x...x.x....',
+    //   '.xxx...xxx..x...x.x...x..xxx...xxx...xxx..x....',
+    // ]
+    const text = [
+      '.xxxx.x...x...x...xxxxx...xxxx..xxx....x....xxxx.xxxxx',
+      'x.....x...x..x.x......x..x.....x...x..x.x..x.....x....',
+      'x.....x...x.x...x....x...x.....x...x.x...x.x.....x....',
+      'x.....xxxxx.xxxxx...x.....xxx..xxxx..xxxxx.x.....xxxx.',
+      'x.....x...x.x...x..x.........x.x.....x...x.x.....x....',
+      'x.....x...x.x...x.x..........x.x.....x...x.x.....x....',
+      '.xxxx.x...x.x...x.xxxxx..xxxx..x.....x...x..xxxx.xxxxx',
+    ];
+    const maxWidth = 5;
+    const xCount = text[0].length;
     const step = maxWidth / xCount;
     const yCount = 7;
     const cylinders = [];
-
-    const text = [
-      '.xxx...xxx..x...x.x...x..xxx...xxx...xxx..x...x',
-      'x...x...x...x...x.x...x.x...x.x...x.x...x.x...x',
-      'x.......x...xx..x..x.x..x.....x...x.x......x.x.',
-      '.xxx....x...x.x.x...x...x.....x...x..xxx....x..',
-      '....x...x...x..xx..x.x..x.....x...x.....x..x...',
-      'x...x...x...x...x.x...x.x...x.x...x.x...x.x....',
-      '.xxx...xxx..x...x.x...x..xxx...xxx...xxx..x....',
-    ]
 
     const cylinderGeom = new THREE.BoxBufferGeometry(step * 0.8, step * 0.8, step * 15, 1, 1, 1);
     const material = new THREE.MeshLambertMaterial({ color: 0x222222 });
@@ -185,7 +194,6 @@ class Stage {
         cylinders.push(mesh);
       }
     }
-    const cylinder = new THREE.Mesh(cylinderGeom, material);
   }
 
   entryCamera() {
