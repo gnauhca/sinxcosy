@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Chaz</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'PingFang SC', -apple-system, 'Helvetica Neue', Helvetica, BlinkMacSystemFont, 'Microsoft YaHei',
+          tahoma, Arial, 'Open Sans', 'Hiragino Sans GB', 'Heiti SC', 'WenQuanYi Micro Hei', sans-serif;
+      }
+      .main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        color: #333;
+      }
+      img,
+      video {
+        display: block;
+        width: 100%;
+      }
+      a {
+        color: #333 !important;
+      }
+      .item {
+        position: relative;
+        cursor: pointer;
+        margin: 0 6px;
+      }
+      .item .item-inner {
+        padding: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+        opacity: 0;
+        position: absolute;
+        bottom: 60px;
+        pointer-events: none;
+        transform: translateY(-20px);
+        transition: all 0.3s;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+      }
+      .item:hover .svg {
+        transform: scale(1.2);
+      }
+      .item:hover .item-inner {
+        opacity: 1;
+        transform: none;
+      }
+      .svg {
+        display: block;
+        background-color: currentColor;
+        background-size: contain;
+        mask-repeat: no-repeat;
+        transition: all .2s;
+      }
+      .fork {
+        position: relative;
+        cursor: pointer;
+        margin: 0;
+      }
+      .svg--fork {
+        position: relative;
+        width: 36px;
+        height: 36px;
+        -webkit-mask-image: url(./fork1.svg);
+        -webkit-mask-size: contain;
+      }
+      .fork__qr {
+        left: calc(50% - 200px / 2);
+        width: 200px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+        pointer-events: none;
+      }
+      /* ya */
+      .svg--ya {
+        width: 36px;
+        height: 36px;
+        -webkit-mask-image: url(./ya.svg);
+        -webkit-mask-size: contain;
+      }
+      .ya__img {
+        width: 400px;
+        left: calc(50% - 250px / 2);
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+        pointer-events: none;
+      }
+      /* code */
+      .svg--code {
+        width: 36px;
+        height: 36px;
+        -webkit-mask-image: url(./code.svg);
+        -webkit-mask-size: contain;
+      }
+      /* yong */
+      .svg--yong {
+        width: 38px;
+        height: 34px;
+        -webkit-mask-image: url(./yong.svg);
+        -webkit-mask-size: contain;
+      }
+      .yong__img {
+        left: calc(50% - 500px / 2);
+        width: 500px;
+      }
+      /* ipad */
+      .svg--ipad {
+        width: 34px;
+        height: 34px;
+        -webkit-mask-image: url(./ipad.svg);
+        -webkit-mask-size: contain;
+      }
+      /* pi */
+      .svg--pi {
+        width: 26px;
+        height: 26px;
+        -webkit-mask-image: url(./pi.svg);
+        -webkit-mask-size: contain;
+      }
+      .pi__img {
+        left: calc(50% - 400px / 2);
+        width: 400px;
+        font-size: 30px;
+        white-space: wrap;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="item fork">
+        <div class="svg svg--fork"></div>
+        <div class="item-inner fork__qr">
+          <img class="" src="./qrcode2.png" alt="" />
+        </div>
+      </div>
+      <div class="item">
+        <div class="svg svg--ya"></div>
+        <div class="item-inner ya__img">
+          <img class="" src="./address.jpg" alt="" />
+        </div>
+      </div>
+      <div class="item code">
+        <a href="https://sinxcosy.com/daily-effect-test/#./css-cube/cube.html" target="_blank">
+          <div class="svg svg--code"></div>
+        </a>
+      </div>
+      <div class="item yong">
+        <a href="./yong.mp4" target="_blank"><div class="svg svg--yong"></div></a>
+        <div class="item-inner yong__img">
+          <video class="yong__video" src="./yong.mp4" playsinline></video>
+        </div>
+      </div>
+      <div class="item ipad">
+        <div class="svg svg--ipad"></div>
+      </div>
+      <div class="item">
+        <div class="svg svg--pi"></div>
+        <div class="item-inner pi__img">
+          3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982...
+        </div>
+      </div>
+    </div>
+    <script>
+      const yongVideo = document.querySelector('.yong__video');
+      const yongSvg = document.querySelector('.yong');
+      yongSvg.addEventListener('mouseenter', () => {
+        yongVideo.play();
+      });
+      yongSvg.addEventListener('mouseleave', () => {
+        yongVideo.pause();
+        yongVideo.currentTime = 0;
+      });
+    </script>
+  </body>
+</html>

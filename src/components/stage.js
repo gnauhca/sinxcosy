@@ -62,7 +62,7 @@ class Stage {
     // this.scene.add(axesHelper);
 
     this.camera = new THREE.PerspectiveCamera(40, this.container.offsetWidth / this.container.offsetHeight, 0.1, 1000);
-    this.camera.position.set(0, -10, 10).setLength(6);
+    this.camera.position.set(0, -8, 10).setLength(6);
 
     this.controls = new OrbitControls(this.camera, this.container);
     // this.controls.enabled = false;
@@ -79,22 +79,22 @@ class Stage {
     this.controls.addEventListener('change', () => this.onControlChange);
     window.addEventListener('resize', this.onResize.bind(this));
 
-    // this.setupParticle();
-    this.setupCylinder();
+    this.setupParticle();
+    // this.setupCylinder();
   }
 
   setupParticle() {
     const cvs = document.createElement('canvas');
     cvs.style = 'position: absolute; left: 0; top: 0;';
-    cvs.width = 1600;
+    cvs.width = 1800;
     cvs.height = 400;
     const ctx = cvs.getContext('2d');
     ctx.translate(cvs.width / 2, cvs.height / 2);
-    ctx.font = "bold 320px sans-serif";
+    ctx.font = "bold 280px sans-serif";
     ctx.fillStyle = 'red';
     ctx.textAlign = 'center';
     ctx.textBaseline="middle";
-    ctx.fillText('sinxcosy', 0, 0);
+    ctx.fillText('CHAZ SPACE', 0, 0);
     ctx.font = "bold 40px sans-serif";
 
     const pointCount = 2 || Math.min(window.innerWidth / 1440, 1);
